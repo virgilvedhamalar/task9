@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager - Glassmorphic Workspace</title>
+    <!-- Font Awesome CDN for Beautiful Custom Icons -->
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+      crossorigin="anonymous" 
+      referrerpolicy="no-referrer" 
+    />
+    <!-- Custom CSS Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      
+      <!-- HEADER / BRANDING SECTION -->
+      <header>
+        <div class="brand-section">
+          <div class="logo-circle" id="app-logo">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+          <div class="brand-title">
+            <h1 id="welcome-greeting">Good morning, Guest!</h1>
+            <p>Track, manage, and complete your professional schedules</p>
+          </div>
+        </div>
+        <div class="time-section">
+          <h2 id="current-date">Sunday, July 5, 2026</h2>
+          <p>Local Workspace Time</p>
+        </div>
+      </header>
+
+      <!-- DASHBOARD SUMMARY CARDS -->
+      <section class="stats-grid">
+        <!-- Card: Total Tasks -->
+        <div class="stat-card" id="stat-card-total">
+          <div class="stat-icon blue">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Tasks</span>
+            <span class="stat-number" id="total-tasks">0</span>
+          </div>
+        </div>
+
+        <!-- Card: Completed Tasks -->
+        <div class="stat-card" id="stat-card-completed">
+          <div class="stat-icon green">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Completed</span>
+            <span class="stat-number" id="completed-tasks">0</span>
+          </div>
+        </div>
+
+        <!-- Card: Pending Tasks -->
+        <div class="stat-card" id="stat-card-pending">
+          <div class="stat-icon amber">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Pending</span>
+            <span class="stat-number" id="pending-tasks">0</span>
+          </div>
+        </div>
+
+        <!-- Progress Tracker Bar Card -->
+        <div class="progress-card" id="stat-card-progress">
+          <div class="progress-header">
+            <span>Overall Task Completion Progress</span>
+            <span id="progress-text">0% Tasks Completed</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTENT GRID (Sidebar Form & List Feed) -->
+      <main class="content-grid">
+        
+        <!-- SIDEBAR: SCHEDULER FORM -->
+        <section class="glass-panel" id="form-container">
+          <h3 id="form-title"><i class="fa-regular fa-calendar-plus mr-2"></i>Create New Task</h3>
+          
+          <form id="task-form" novalidate>
+            <!-- Hidden Input for Editing Tracking -->
+            <input type="hidden" id="task-id" value="" />
+
+            <!-- Field: Task Title -->
+            <div class="form-group">
+              <label class="form-label" for="task-title">Task Title</label>
+              <input 
+                type="text" 
+                id="task-title" 
+                class="form-control" 
+                placeholder="e.g., Deliver design system specs" 
+                required 
+              />
+              <span class="error-msg" id="error-title"></span>
+            </div>
+
+            <!-- Field: Task Description -->
+            <div class="form-group">
+              <label class="form-label" for="task-desc">Description</label>
+              <textarea 
+                id="task-desc" 
+                class="form-control" 
+                placeholder="Detail the key action items and metrics..." 
+                required
+              ></textarea>
+              <span class="error-msg" id="error-description"></span>
+            </div>
+
+            <!-- Field: Priority Select -->
+            <div class="form-group">
+              <label class="form-label" for="task-priority">Priority Level</label>
+              <select id="task-priority" class="form-control">
+                <option value="low">Low Priority</option>
+                <option value="medium" selected>Medium Priority</option>
+                <option value="high">High Priority</option>
+              </select>
+              <span class="error-msg" id="error-priority"></span>
+            </div>
+
+            <!-- Field: Category Select -->
+            <div class="form-group">
+              <label class="form-label" for="task-category">Category</label>
+              <select id="task-category" class="form-control">
+                <option value="work" selected>Work</option>
+                <option value="personal">Personal</option>
+                <option value="study">Study / Research</option>
+                <option value="other">Other</option>
+              </select>
+              <span class="error-msg" id="error-category"></span>
+            </div>
+
+            <!-- Field: Due Date -->
+            <div class="form-group">
+              <label class="form-label" for="task-due">Due Date</label>
+              <input 
+                type="date" 
+                id="task-due" 
+                class="form-control" 
+                required 
+              />
+              <span class="error-msg" id="error-dueDate"></span>
+            </div>
+
+            <!-- Action controls buttons -->
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="form-submit-btn">
+                <i class="fa-solid fa-plus mr-2"></i>Add Task
+              </button>
+              <button type="button" class="btn btn-secondary hidden" id="form-cancel-btn">
+                <i class="fa-solid fa-xmark mr-2"></i>Cancel Edit
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- TASKS LIST FEED AND SEARCH/FILTERS -->
+        <section class="tasks-feed-column">
+          
+          <!-- SEARCH & FILTERS ROW -->
+          <div class="controls-panel">
+            <!-- Search bar -->
+            <div class="search-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input 
+                type="text" 
+                id="search-input" 
+                class="form-control search-control" 
+                placeholder="Search tasks by title or description..." 
+              />
+            </div>
+
+            <!-- Filter: Status -->
+            <select id="filter-status" class="form-control select-filter">
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+            </select>
+
+            <!-- Filter: Priority -->
+            <select id="filter-priority" class="form-control select-filter">
+              <option value="all">All Priorities</option>
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+
+            <!-- Filter: Category -->
+            <select id="filter-category" class="form-control select-filter">
+              <option value="all">All Categories</option>
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="study">Study</option>
+              <option value="other">Other</option>
+            </select>
+
+            <!-- Sort option -->
+            <select id="sort-by" class="form-control select-filter">
+              <option value="due-asc">Sort: Due Date (Asc)</option>
+              <option value="due-desc">Sort: Due Date (Desc)</option>
+              <option value="alpha-asc">Sort: Alphabetical (A-Z)</option>
+              <option value="alpha-desc">Sort: Alphabetical (Z-A)</option>
+              <option value="date-created-desc">Sort: Date Created</option>
+            </select>
+          </div>
+
+          <!-- DYNAMIC TASKS FEED -->
+          <div class="tasks-grid-feed" id="tasks-container">
+            <!-- Appended programmatically via JS -->
+          </div>
+        </section>
+
+      </main>
+
+      <!-- FOOTER SECTION -->
+      <footer>
+        <p>&copy; 2026 Task Manager Applet. Crafted with ❤️ for professional schedule management. Powered by Vanilla JS.</p>
+      </footer>
+    </div>
+
+    <!-- CONFIRMATION MODAL (CUSTOM DIALOG) -->
+    <div class="modal-overlay" id="delete-modal" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-alert-icon">
+          <i class="fa-solid fa-trash-can"></i>
+        </div>
+        <h4>Are you absolutely sure?</h4>
+        <p>This action cannot be undone. This will permanently delete the task from your local database store.</p>
+        <div class="modal-buttons">
+          <button class="btn btn-secondary" id="cancel-delete-btn">Cancel</button>
+          <button class="btn btn-primary" id="confirm-delete-btn" style="background: linear-gradient(135deg, #f43f5e, #e11d48);">Delete Task</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toast-container">
+      <!-- Appended programmatically via JS -->
+    </div>
+
+    <!-- Main Module script entry point -->
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>

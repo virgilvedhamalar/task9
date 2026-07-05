@@ -1,0 +1,6 @@
+{
+  "name": "Task Manager",
+  "description": "A responsive, modern task management dashboard built with pure HTML, CSS, and vanilla ES6 JavaScript.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
